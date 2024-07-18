@@ -20,7 +20,7 @@ This project has the goal to manage campaigns, so it will provide some APIs that
 1. Clone this repository
 2. Open the repository folder and run ```npm i```
 3. Run ```docker-compose up```
-4. Run ```npm run start````
+4. Run ```npm run start```
 
 #### Where is the API documentation?
 After you ran the ```npm run start```you can navigate to http://localhost:3000/api to see the swagger documentation.
@@ -29,8 +29,8 @@ After you ran the ```npm run start```you can navigate to http://localhost:3000/a
 To run the unit test just run ```npm run test```
 
 #### How to run the end to end (e2e) tests?
-1. Run ```npm run start````
-2. Run ```npm run test:e2e 
+1. Run ```npm run start```
+2. Run ```npm run test:e2e```
 
 #### Author Contact
 
