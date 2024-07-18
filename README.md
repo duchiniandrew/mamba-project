@@ -4,6 +4,13 @@
 
 This project has the goal to manage campaigns, so it will provide some APIs that you can use to do some CRUD operations like CREATE, UPDATE, DELETE and READ.
 
+#### Which Technologies this project uses?
+- Backend: Built using Nest framework (a Node JS framework)
+- API: Built with Express.js
+- ORM: Prisma
+- Database: Postgres
+- Infrastructure: Docker and docker-compose
+
 #### Requirements to run this project
 Node, NPM and docker
 
