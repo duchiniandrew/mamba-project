@@ -1,7 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Category, Status } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  Validate,
+} from 'class-validator';
+import { IsStartDateHigherThanEndDate } from '../validation/IsStartDateHigherThanEndDate';
+import { IsStartDateLessThanToday } from '../validation/IsStartDateLessThanToday';
 
 export class CreateCampaignDto {
   @IsString()
@@ -15,6 +23,8 @@ export class CreateCampaignDto {
 
   @IsDate()
   @Type(() => Date)
+  @Validate(IsStartDateHigherThanEndDate)
+  @Validate(IsStartDateLessThanToday)
   @IsNotEmpty()
   @ApiProperty({
     type: String,

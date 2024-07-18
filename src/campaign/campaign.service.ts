@@ -4,12 +4,15 @@ import { CreateCampaignDto } from './dto/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/updateCampaign.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from './types';
+import { Status } from '@prisma/client';
 
 @Injectable()
 export class CampaignService {
   constructor(private prisma: PrismaService) {}
 
   create(createCampaignDto: CreateCampaignDto) {
+    if (createCampaignDto.endDate.getTime() < new Date().getTime())
+      createCampaignDto.status = Status.EXPIRED;
     return this.prisma.campaign.create({ data: createCampaignDto });
   }
 
