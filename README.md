@@ -12,7 +12,9 @@ This project has the goal to manage campaigns, so it will provide some APIs that
 - Infrastructure: Docker and docker-compose
 
 #### Requirements to run this project
-Node, NPM and docker
+- Node 
+- NPM
+- Docker
 
 #### How to run this proeject?
 1. Clone this repository
