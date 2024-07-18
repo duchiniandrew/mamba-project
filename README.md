@@ -28,6 +28,10 @@ After you ran the ```npm run start```you can navigate to http://localhost:3000/a
 #### How to run the unit tests?
 To run the unit test just run ```npm run test```
 
+#### How to run the end to end (e2e) tests?
+1. Run ```npm run start````
+2. Run ```npm run test:e2e 
+
 #### Author Contact
 
 Github: duchiniandrew
