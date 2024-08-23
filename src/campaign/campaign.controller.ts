@@ -26,7 +26,7 @@ import { CampaignEntity } from './entity/campaign.entity';
 @Controller('campaign')
 @ApiTags('Campaign')
 export class CampaignController {
-  constructor(private readonly campaignService: CampaignService) {}
+  constructor(private readonly campaignService: CampaignService) { }
 
   @Post()
   @ApiProperty({
@@ -49,7 +49,7 @@ export class CampaignController {
       error: 'Bad Request',
     },
   })
-  create(@Body() createCampaignDto: CreateCampaignDto) {
+  create(@Body() createCampaignDto: CreateCampaignDto): Promise<CampaignEntity> {
     return this.campaignService.create(createCampaignDto);
   }
 
@@ -62,7 +62,7 @@ export class CampaignController {
     isArray: true,
   })
   @ApiResponse({ status: 200, description: 'List of all campaigns.' })
-  findAll() {
+  findAll(): Promise<CampaignEntity[]> {
     return this.campaignService.findAll();
   }
 
@@ -89,7 +89,7 @@ export class CampaignController {
     description: 'Get a single a campaign.',
     type: CampaignEntity,
   })
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<CampaignEntity | RequestError> {
     const campaign = await this.campaignService.findOne(id);
     if (!campaign) return new RequestError('Campaign not found.', 404);
     return campaign;
@@ -131,7 +131,7 @@ export class CampaignController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() UpdateCampaignDto: UpdateCampaignDto,
-  ) {
+  ): Promise<CampaignEntity | RequestError> {
     return this.campaignService.update(id, UpdateCampaignDto);
   }
 
@@ -168,7 +168,7 @@ export class CampaignController {
       error: 'Not Found',
     },
   })
-  async remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<CampaignEntity | RequestError> {
     const campaign = await this.campaignService.remove(id);
     if (!campaign) return new RequestError('Campaign not found.', 404);
     return campaign;

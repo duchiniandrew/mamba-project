@@ -5,26 +5,27 @@ import { UpdateCampaignDto } from './dto/updateCampaign.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';
 import { Status } from '@prisma/client';
+import { CampaignEntity } from './entity/campaign.entity';
 
 @Injectable()
 export class CampaignService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
-  create(createCampaignDto: CreateCampaignDto) {
+  create(createCampaignDto: CreateCampaignDto): Promise<CampaignEntity> {
     if (createCampaignDto.endDate.getTime() < new Date().getTime())
       createCampaignDto.status = Status.EXPIRED;
     return this.prisma.campaign.create({ data: createCampaignDto });
   }
 
-  findAll() {
+  findAll(): Promise<CampaignEntity[]> {
     return this.prisma.campaign.findMany();
   }
 
-  findOne(id: number) {
+  findOne(id: number): Promise<CampaignEntity> {
     return this.prisma.campaign.findUnique({ where: { id } });
   }
 
-  async update(id: number, updateCampaignDto: UpdateCampaignDto) {
+  async update(id: number, updateCampaignDto: UpdateCampaignDto): Promise<CampaignEntity | RequestError> {
     try {
       const campaign = await this.prisma.campaign.update({
         data: updateCampaignDto,
@@ -38,7 +39,7 @@ export class CampaignService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<CampaignEntity | RequestError> {
     try {
       const campaign = await this.prisma.campaign.delete({
         where: { id },
