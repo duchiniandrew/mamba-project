@@ -28,7 +28,23 @@ model User {
   campaigns Campaign[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-  groupId   Int?
+  UserGroup UserGroup[]
+}
+
+model UserGroup {
+  id      Int   @id @default(autoincrement())
+  userId  Int
+  groupId Int
+  User    User  @relation(fields: [userId], references: [id])
+  Group   Group @relation(fields: [groupId], references: [id])
+}
+
+model Group {
+  id        Int         @id @default(autoincrement())
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  UserGroup UserGroup[]
 }
 
 enum Category {
