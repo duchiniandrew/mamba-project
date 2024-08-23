@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma.service';
 import { CreateCampaignDto } from './dto/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/updateCampaign.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
-import { RequestError } from './types';
+import { RequestError } from '../types';
 import { Status } from '@prisma/client';
 
 @Injectable()

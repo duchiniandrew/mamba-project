@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CampaignModule } from './campaign/campaign.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [CampaignModule],
+  imports: [CampaignModule, UserModule],
   controllers: [],
   providers: [],
 })

@@ -8,9 +8,9 @@ import {
   ParseIntPipe,
   Delete,
 } from '@nestjs/common';
-import { CampaignService } from './campaign.service';
-import { CreateCampaignDto } from './dto/createCampaign.dto';
-import { UpdateCampaignDto } from './dto/updateCampaign.dto';
+import { UserService } from './user.service';
+import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 import { BadRequestCommonError, RequestError } from '../types';
 import {
   ApiBadRequestResponse,
@@ -21,23 +21,23 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CampaignEntity } from './entity/campaign.entity';
+import { UserEntity } from './entity/user.entity';
 
-@Controller('campaign')
-@ApiTags('Campaign')
-export class CampaignController {
-  constructor(private readonly campaignService: CampaignService) {}
+@Controller('user')
+@ApiTags('User')
+export class UserController {
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   @ApiProperty({
-    type: CreateCampaignDto,
+    type: CreateUserDto,
     description: 'This is a required property',
   })
-  @ApiOperation({ summary: 'Create a campaign' })
+  @ApiOperation({ summary: 'Create a user' })
   @ApiResponse({
     status: 200,
-    type: CampaignEntity,
-    description: 'Return the campaign created.',
+    type: UserEntity,
+    description: 'Return the user created.',
   })
   @ApiBadRequestResponse({
     status: 400,
@@ -49,72 +49,72 @@ export class CampaignController {
       error: 'Bad Request',
     },
   })
-  create(@Body() createCampaignDto: CreateCampaignDto) {
-    return this.campaignService.create(createCampaignDto);
+  create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    return this.userService.create(createUserDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all campaigns' })
+  @ApiOperation({ summary: 'Get all Users' })
   @ApiResponse({
     status: 200,
-    type: CampaignEntity,
-    description: 'Return all campaigns.',
+    type: UserEntity,
+    description: 'Return all Users.',
     isArray: true,
   })
-  @ApiResponse({ status: 200, description: 'List of all campaigns.' })
-  findAll() {
-    return this.campaignService.findAll();
+  @ApiResponse({ status: 200, description: 'List of all Users.' })
+  findAll(): Promise<UserEntity[]> {
+    return this.userService.findAll();
   }
 
   @Get(':id')
   @ApiParam({
     name: 'id',
     required: true,
-    description: 'Campaign ID',
+    description: 'User ID',
     schema: { oneOf: [{ type: 'number' }, { type: 'integer' }] },
   })
-  @ApiOperation({ summary: 'Get one campaign' })
+  @ApiOperation({ summary: 'Get one user' })
   @ApiNotFoundResponse({
     status: 404,
-    description: 'No campaigns found.',
+    description: 'No Users found.',
     type: RequestError,
     example: {
       statusCode: 404,
-      message: 'Campaign not found.',
+      message: 'User not found.',
       error: 'Not Found',
     },
   })
   @ApiResponse({
     status: 200,
-    description: 'Get a single a campaign.',
-    type: CampaignEntity,
+    description: 'Get a single a user.',
+    type: UserEntity,
   })
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    const campaign = await this.campaignService.findOne(id);
-    if (!campaign) return new RequestError('Campaign not found.', 404);
-    return campaign;
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<UserEntity | RequestError> {
+    const user = await this.userService.findOne(id);
+    if (!user) return new RequestError('User not found.', 404);
+    return user;
   }
 
   @Patch(':id')
   @ApiParam({
     name: 'id',
     required: true,
-    description: 'Campaign ID',
+    description: 'User ID',
     schema: { oneOf: [{ type: 'number' }, { type: 'integer' }] },
   })
-  @ApiOperation({ summary: 'Update a campaign' })
+  @ApiOperation({ summary: 'Update a user' })
   @ApiResponse({
     status: 200,
-    type: CampaignEntity,
-    description: 'Return the updated campaign.',
+    type: UserEntity,
+    description: 'Return the updated user.',
   })
   @ApiNotFoundResponse({
     status: 404,
-    description: 'No campaigns found.',
+    description: 'No Users found.',
     type: RequestError,
     example: {
       statusCode: 404,
-      message: 'Campaign not found.',
+      message: 'User not found.',
       error: 'Not Found',
     },
   })
@@ -130,23 +130,23 @@ export class CampaignController {
   })
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() UpdateCampaignDto: UpdateCampaignDto,
-  ) {
-    return this.campaignService.update(id, UpdateCampaignDto);
+    @Body() UpdateUserDto: UpdateUserDto,
+  ): Promise<UserEntity | RequestError> {
+    return this.userService.update(id, UpdateUserDto);
   }
 
   @Delete(':id')
   @ApiParam({
     name: 'id',
     required: true,
-    description: 'Campaign ID',
+    description: 'User ID',
     schema: { oneOf: [{ type: 'number' }, { type: 'integer' }] },
   })
-  @ApiOperation({ summary: 'Delete a campaign' })
+  @ApiOperation({ summary: 'Delete a user' })
   @ApiResponse({
     status: 200,
-    type: CampaignEntity,
-    description: 'Return the deleted campaign.',
+    type: UserEntity,
+    description: 'Return the deleted user.',
   })
   @ApiBadRequestResponse({
     status: 400,
@@ -160,17 +160,17 @@ export class CampaignController {
   })
   @ApiNotFoundResponse({
     status: 404,
-    description: 'No campaigns found.',
+    description: 'No Users found.',
     type: RequestError,
     example: {
       statusCode: 404,
-      message: 'Campaign not found.',
+      message: 'User not found.',
       error: 'Not Found',
     },
   })
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    const campaign = await this.campaignService.remove(id);
-    if (!campaign) return new RequestError('Campaign not found.', 404);
-    return campaign;
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<UserEntity | RequestError> {
+    const user = await this.userService.remove(id);
+    if (!user) return new RequestError('User not found.', 404);
+    return user;
   }
 }

@@ -1,25 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma.service';
 import { CreateCampaignDto } from './dto/createCampaign.dto';
-import { UpdateCampaignDto } from './dto/updateCampaign.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 import campaignFactory from '../../test/factories/campaign';
-import { CampaignController } from './campaign.controller';
-import { CampaignService } from './campaign.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
 import { Category, Status } from '@prisma/client';
-import { RequestError } from '../types';
+import { RequestError } from './types';
 
 describe('SectorController', () => {
-  let controller: CampaignController;
-  let campaignService: CampaignService;
+  let controller: UserController;
+  let campaignService: UserService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CampaignController],
-      providers: [CampaignService, PrismaService],
+      controllers: [UserController],
+      providers: [UserService, PrismaService],
     }).compile();
 
-    controller = module.get<CampaignController>(CampaignController);
-    campaignService = module.get<CampaignService>(CampaignService);
+    controller = module.get<UserController>(UserController);
+    campaignService = module.get<UserService>(UserService);
   });
 
   describe('findAll', () => {
@@ -177,7 +177,7 @@ describe('SectorController', () => {
         updatedAt: new Date('2024-12-31'),
         createdAt: new Date('2024-01-01'),
       });
-      const updateCampaignDto: UpdateCampaignDto = {
+      const updateCampaignDto: UpdateUserDto = {
         name: 'Politics campaign',
         endDate: new Date('2024-08-31'),
         category: Category.POLITICAL,
@@ -199,7 +199,7 @@ describe('SectorController', () => {
     });
 
     it('should try to update a campaign that does not exist', async () => {
-      const updateCampaignDto: UpdateCampaignDto = {
+      const updateCampaignDto: UpdateUserDto = {
         name: 'Politics campaign',
         endDate: new Date('2024-08-31'),
         category: Category.POLITICAL,
