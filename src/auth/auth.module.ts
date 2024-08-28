@@ -12,7 +12,6 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    UserModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
