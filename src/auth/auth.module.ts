@@ -9,13 +9,14 @@ import { AuthGuard } from 'src/guard/auth.guard';
 import { UserService } from 'src/user/user.service';
 import { PrismaService } from 'src/prisma.service';
 import { ConfigModule } from '@nestjs/config';
+import { RoleService } from 'src/role/role.service';
 
 @Module({
   imports: [
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '7d' },
     }),
     ConfigModule.forRoot({
       envFilePath: ['.env', '.env.development'],
@@ -24,6 +25,7 @@ import { ConfigModule } from '@nestjs/config';
   providers: [
     UserService,
     PrismaService,
+    RoleService,
     AuthService, {
       provide: APP_GUARD,
       useClass: AuthGuard,

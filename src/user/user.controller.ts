@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/createUser.dto';
@@ -23,6 +24,11 @@ import {
 } from '@nestjs/swagger';
 import { UserEntity } from './entity/user.entity';
 import { Public } from 'src/decorators/isPublic.decorator';
+import { Prisma } from '@prisma/client';
+import { CreateRoleDto } from './dto/createUserRole.dto';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enum/role.enum';
+import { RolesGuard } from 'src/guard/roles.guard';
 
 @Controller('user')
 @ApiTags('User')
@@ -174,5 +180,13 @@ export class UserController {
     const user = await this.userService.remove(id);
     if (!user) return new RequestError('User not found.', 404);
     return user;
+  }
+
+  @Post('/add-role')
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  addUserRole(@Body() createRoleDto: CreateRoleDto): Promise<void> {
+    const where: Prisma.UsersWhereUniqueInput = { id: createRoleDto.id };
+    return this.userService.addUserRole(where, createRoleDto.roleName);
   }
 }

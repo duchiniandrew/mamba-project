@@ -6,6 +6,7 @@ import { UserProcedure } from '../user/user.procedure';
 import { PrismaService } from 'src/prisma.service';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { RoleService } from 'src/role/role.service';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
         TrpcRouter,
         UserService,
         UserProcedure,
+        RoleService,
     ],
 })
 export class TrpcModule { }
