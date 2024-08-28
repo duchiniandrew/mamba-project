@@ -5,7 +5,7 @@ CREATE TYPE "Category" AS ENUM ('POLITICAL', 'SOCIAL', 'ECONOMIC', 'ENVIRONMENTA
 CREATE TYPE "Status" AS ENUM ('ACTIVED', 'PAUSED', 'EXPIRED');
 
 -- CreateTable
-CREATE TABLE "Campaign" (
+CREATE TABLE "Campaigns" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
@@ -15,5 +15,5 @@ CREATE TABLE "Campaign" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Campaign_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Campaigns_pkey" PRIMARY KEY ("id")
 );

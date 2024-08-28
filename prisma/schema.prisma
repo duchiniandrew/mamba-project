@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Campaign {
+model Campaigns {
   id        Int      @id @default(autoincrement())
   name      String
   startDate DateTime
@@ -16,35 +16,18 @@ model Campaign {
   category  Category
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
+  Users     Users?    @relation(fields: [userId], references: [id])
   userId    Int?
 }
 
-model User {
-  id        Int         @id @default(autoincrement())
-  email     String      @unique
-  password  String
-  name      String
-  campaigns Campaign[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  UserGroup UserGroup[]
-}
-
-model UserGroup {
-  id      Int   @id @default(autoincrement())
-  userId  Int
-  groupId Int
-  User    User  @relation(fields: [userId], references: [id])
-  Group   Group @relation(fields: [groupId], references: [id])
-}
-
-model Group {
-  id        Int         @id @default(autoincrement())
-  name      String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  UserGroup UserGroup[]
+model Users {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
+  password   String
+  name       String
+  campaigns  Campaigns[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 }
 
 enum Category {
