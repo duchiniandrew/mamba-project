@@ -22,6 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CampaignEntity } from './entity/campaign.entity';
+import { Public } from 'src/decorators/isPublic.decorator';
 
 @Controller('campaign')
 @ApiTags('Campaign')
@@ -54,6 +55,7 @@ export class CampaignController {
   }
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Get all campaigns' })
   @ApiResponse({
     status: 200,

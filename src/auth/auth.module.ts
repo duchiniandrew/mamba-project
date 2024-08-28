@@ -4,6 +4,11 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { jwtConstants } from './auth.constants';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from 'src/guard/auth.guard';
+import { UserService } from 'src/user/user.service';
+import { PrismaService } from 'src/prisma.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -13,9 +18,18 @@ import { jwtConstants } from './auth.constants';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
+    ConfigModule.forRoot({
+      envFilePath: ['.env', '.env.development'],
+    }),
   ],
-  providers: [AuthService],
+  providers: [
+    UserService,
+    PrismaService,
+    AuthService, {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    }],
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }
