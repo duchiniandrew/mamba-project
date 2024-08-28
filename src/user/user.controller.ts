@@ -90,7 +90,7 @@ export class UserController {
     type: UserEntity,
   })
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<UserEntity | RequestError> {
-    const user = await this.userService.findOne(id);
+    const user = await this.userService.findOne({ id });
     if (!user) return new RequestError('User not found.', 404);
     return user;
   }

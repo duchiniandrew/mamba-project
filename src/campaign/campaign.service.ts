@@ -14,20 +14,20 @@ export class CampaignService {
   create(createCampaignDto: CreateCampaignDto): Promise<CampaignEntity> {
     if (createCampaignDto.endDate.getTime() < new Date().getTime())
       createCampaignDto.status = Status.EXPIRED;
-    return this.prisma.campaign.create({ data: createCampaignDto });
+    return this.prisma.campaigns.create({ data: createCampaignDto });
   }
 
   findAll(): Promise<CampaignEntity[]> {
-    return this.prisma.campaign.findMany();
+    return this.prisma.campaigns.findMany();
   }
 
   findOne(id: number): Promise<CampaignEntity> {
-    return this.prisma.campaign.findUnique({ where: { id } });
+    return this.prisma.campaigns.findUnique({ where: { id } });
   }
 
   async update(id: number, updateCampaignDto: UpdateCampaignDto): Promise<CampaignEntity | RequestError> {
     try {
-      const campaign = await this.prisma.campaign.update({
+      const campaign = await this.prisma.campaigns.update({
         data: updateCampaignDto,
         where: { id },
       });
@@ -41,7 +41,7 @@ export class CampaignService {
 
   async remove(id: number): Promise<CampaignEntity | RequestError> {
     try {
-      const campaign = await this.prisma.campaign.delete({
+      const campaign = await this.prisma.campaigns.delete({
         where: { id },
       });
       return campaign;

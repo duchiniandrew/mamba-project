@@ -19,7 +19,7 @@ export class UserProcedure {
                 }),
             )
             .query(({ input }) => {
-                if(!input.name || !input.email || !input.password) {
+                if (!input.name || !input.email || !input.password) {
                     throw new Error('Invalid input');
                 }
                 const createUserDto: CreateUserDto = {
@@ -47,7 +47,7 @@ export class UserProcedure {
             )
             .query(({ input }) => {
                 const { id } = input;
-                return this.userService.findOne(id);
+                return this.userService.findOne({ id });
             });
     }
 
@@ -61,7 +61,7 @@ export class UserProcedure {
             )
             .query(({ input }) => {
                 const { id } = input;
-                return this.userService.update(id, input );
+                return this.userService.update(id, input);
             });
     }
 
