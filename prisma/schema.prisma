@@ -29,6 +29,23 @@ model Users {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   UserGroups UserGroups[]
+  UserRoles  UserRoles[]
+}
+
+model Roles {
+  id        Int         @id @default(autoincrement())
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  UserRole  UserRoles[]
+}
+
+model UserRoles {
+  id     Int   @id @default(autoincrement())
+  userId Int
+  roleId Int
+  User   Users @relation(fields: [userId], references: [id])
+  Role   Roles @relation(fields: [roleId], references: [id])
 }
 
 model UserGroups {
@@ -58,4 +75,12 @@ enum Status {
   ACTIVED
   PAUSED
   EXPIRED
+}
+
+enum Role {
+  ADMIN
+  USER
+  GUEST
+  STAFF
+  MANAGER
 }
