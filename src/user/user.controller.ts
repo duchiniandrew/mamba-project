@@ -22,6 +22,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entity/user.entity';
+import { Public } from 'src/decorators/isPublic.decorator';
 
 @Controller('user')
 @ApiTags('User')
@@ -29,6 +30,7 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Post()
+  @Public()
   @ApiProperty({
     type: CreateUserDto,
     description: 'This is a required property',
