@@ -17,7 +17,14 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:seedUsers": "ts-node ./prisma/seeds/user.seed.ts",
+    "db:seedRoles": "ts-node ./prisma/seeds/role.seed.ts",
+    "db:seedCampaigns": "ts-node ./prisma/seeds/campaign.seed.ts",
+    "db:seedUserRoles": "ts-node ./prisma/seeds/userRoles.seed.ts",
+    "db:seedGroups": "ts-node ./prisma/seeds/group.seed.ts",
+    "db:seedUserGroups": "ts-node ./prisma/seeds/userGroup.seed.ts",
+    "db:seed": "npm run db:seedUsers && npm run db:seedRoles && npm run db:seedGroups && npm run db:seedCampaigns && npm run db:seedUserRoles && npm run db:seedUserGroups"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -32,6 +39,7 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "csv-parser": "^3.0.0",
     "fishery": "^2.2.2",
     "prisma": "^5.17.0",
     "reflect-metadata": "^0.2.0",
