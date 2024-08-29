@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as csv from 'csv-parser';
+import * as bcrypt from 'bcrypt'
 import { PrismaClient } from '@prisma/client';
-import { CreateUserDto } from '../../src/user/dto/createUser.dto';
+import { CreateUserDto } from '../../src/user/dto/request/createUser.dto';
 
 const prisma = new PrismaClient();
 
@@ -18,10 +19,11 @@ const readCSV = (filePath: string): Promise<User[]> => {
         fs.createReadStream(filePath)
             .pipe(csv())
             .on('data', async (data: User) => {
+                const hashedPassword = await bcrypt.hashSync(data.password, process.env["HASH"]);
                 const user: CreateUserDto = {
                     email: data.email,
-                    password: data.password,
                     name: data.name,
+                    password: hashedPassword,
                 };
                 await prisma.users.upsert({ where: { email: user.email }, update: user, create: user });
             })
