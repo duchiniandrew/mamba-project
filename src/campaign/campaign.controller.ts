@@ -7,6 +7,8 @@ import {
   Param,
   ParseIntPipe,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CampaignService } from './campaign.service';
 import { CreateCampaignDto } from './dto/request/createCampaign.dto';
@@ -23,6 +25,7 @@ import {
 } from '@nestjs/swagger';
 import { Public } from 'src/decorators/isPublic.decorator';
 import { CampaignEntity } from './dto/response/campaignEntity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('campaign')
 @ApiTags('Campaign')
@@ -30,6 +33,7 @@ export class CampaignController {
   constructor(private readonly campaignService: CampaignService) { }
 
   @Post()
+  @UseInterceptors(FileInterceptor('file'))
   @ApiProperty({
     type: CreateCampaignDto,
     description: 'This is a required property',
@@ -50,8 +54,8 @@ export class CampaignController {
       error: 'Bad Request',
     },
   })
-  create(@Body() createCampaignDto: CreateCampaignDto): Promise<CampaignEntity> {
-    return this.campaignService.create(createCampaignDto);
+  create(@Body() createCampaignDto: CreateCampaignDto, @UploadedFile() file: Express.Multer.File): Promise<CampaignEntity> {
+    return this.campaignService.create(createCampaignDto, file);
   }
 
   @Get()

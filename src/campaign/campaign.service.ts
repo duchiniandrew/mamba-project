@@ -6,15 +6,27 @@ import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';
 import { Campaigns, Status } from '@prisma/client';
 import { CampaignEntity } from './dto/response/campaignEntity';
+import { S3Service } from 'src/aws/aws.service';
+import { ObjectCannedACL } from '@aws-sdk/client-s3';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CampaignService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService, private s3Service: S3Service, private configService: ConfigService) { }
 
-  async create(createCampaignDto: CreateCampaignDto): Promise<CampaignEntity> {
+  async create(createCampaignDto: CreateCampaignDto, file: Express.Multer.File): Promise<CampaignEntity> {
     if (createCampaignDto.endDate.getTime() < new Date().getTime())
       createCampaignDto.status = Status.EXPIRED;
-    const campaign = await this.prisma.campaigns.create({ data: createCampaignDto });
+    if(file) {
+      await this.s3Service.createObject(file.originalname, file.buffer, ObjectCannedACL.public_read_write);
+    }
+    const imageUrl = file ? this.configService.get<string>('BUCKET_FILE_ADDRESS') + file.originalname : null;
+    const campaign = await this.prisma.campaigns.create({
+      data: {
+        ...createCampaignDto,
+        imageUrl
+      }
+    });
     return this.generateResponseDto(campaign);
   }
 
