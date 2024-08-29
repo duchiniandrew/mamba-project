@@ -16,7 +16,7 @@ model Campaigns {
   category  Category
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Users     Users?    @relation(fields: [userId], references: [id])
+  Users     Users?   @relation(fields: [userId], references: [id])
   userId    Int?
 }
 
@@ -33,11 +33,12 @@ model Users {
 }
 
 model Roles {
-  id        Int         @id @default(autoincrement())
-  name      String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  UserRole  UserRoles[]
+  id         Int          @id @default(autoincrement())
+  name       String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  UserRole   UserRoles[]
+  GroupRoles GroupRoles[]
 }
 
 model UserRoles {
@@ -46,6 +47,14 @@ model UserRoles {
   roleId Int
   User   Users @relation(fields: [userId], references: [id])
   Role   Roles @relation(fields: [roleId], references: [id])
+}
+
+model GroupRoles {
+  id      Int    @id @default(autoincrement())
+  groupId Int
+  roleId  Int
+  Group   Groups @relation(fields: [groupId], references: [id])
+  Role    Roles  @relation(fields: [roleId], references: [id])
 }
 
 model UserGroups {
@@ -57,11 +66,12 @@ model UserGroups {
 }
 
 model Groups {
-  id        Int          @id @default(autoincrement())
-  name      String
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  UserGroup UserGroups[]
+  id         Int          @id @default(autoincrement())
+  name       String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  UserGroup  UserGroups[]
+  GroupRoles GroupRoles[]
 }
 
 enum Category {

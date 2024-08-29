@@ -24,7 +24,8 @@
     "db:seedUserRoles": "ts-node ./prisma/seeds/userRoles.seed.ts",
     "db:seedGroups": "ts-node ./prisma/seeds/group.seed.ts",
     "db:seedUserGroups": "ts-node ./prisma/seeds/userGroup.seed.ts",
-    "db:seed": "npm run db:seedUsers && npm run db:seedRoles && npm run db:seedGroups && npm run db:seedCampaigns && npm run db:seedUserRoles && npm run db:seedUserGroups"
+    "db:seedGroupRole": "ts-node ./prisma/seeds/groupRole.seed.ts",
+    "db:seed": "npm run db:seedUsers && npm run db:seedRoles && npm run db:seedGroups && npm run db:seedCampaigns && npm run db:seedUserRoles && npm run db:seedUserGroups && npm run db:seedGroupRole"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
