@@ -2,19 +2,20 @@ import { Module } from '@nestjs/common';
 import { CampaignModule } from './campaign/campaign.module';
 import { UserModule } from './user/user.module';
 import { TrpcModule } from './trpc/trpc.module';
-import { PrismaService } from './prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
-    CampaignModule, 
-    UserModule, 
+    CampaignModule,
+    UserModule,
     TrpcModule,
     AuthModule,
     RoleModule,
+    PrismaModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule { }

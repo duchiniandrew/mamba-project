@@ -1,26 +1,21 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TrpcService } from './trpc.service';
 import { TrpcRouter } from './trpc.router';
-import { UserService } from '../user/user.service';
-import { UserProcedure } from '../user/user.procedure';
-import { PrismaService } from 'src/prisma.service';
-import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import { RoleService } from 'src/role/role.service';
+import { PrismaModule } from 'src/prisma/prisma.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ envFilePath: ['.env', '.env.development'] }),
-        UserModule
+        PrismaModule,
+        forwardRef(() => UserModule),
     ],
+    exports: [TrpcService],
     controllers: [],
     providers: [
-        PrismaService,
         TrpcService,
         TrpcRouter,
-        UserService,
-        UserProcedure,
-        RoleService,
     ],
 })
 export class TrpcModule { }
