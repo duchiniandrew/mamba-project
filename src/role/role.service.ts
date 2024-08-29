@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateRoleDto } from './dto/request/createRole.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/request/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/request/updateCampaign.dto';
 import campaignFactory from '../../test/factories/campaign';

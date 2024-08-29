@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/request/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/request/updateCampaign.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
