@@ -10,8 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/createUser.dto';
-import { UpdateUserDto } from './dto/updateUser.dto';
+import { CreateUserDto } from './dto/request/createUser.dto';
+import { UpdateUserDto } from './dto/request/updateUser.dto';
 import { BadRequestCommonError, RequestError } from '../types';
 import {
   ApiBadRequestResponse,
@@ -22,10 +22,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserEntity } from './entity/user.entity';
+import { UserEntity } from './dto/response/user.entity';
 import { Public } from 'src/decorators/isPublic.decorator';
 import { Prisma } from '@prisma/client';
-import { CreateRoleDto } from './dto/createUserRole.dto';
+import { CreateRoleDto } from './dto/request/createUserRole.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/role.enum';
 import { RolesGuard } from 'src/guard/roles.guard';
@@ -98,7 +98,13 @@ export class UserController {
     type: UserEntity,
   })
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<UserEntity | RequestError> {
-    const user = await this.userService.findOne({ id });
+    const user = await this.userService.findOne({ id }, {
+      UserRoles: {
+        include: {
+          Role: true
+        }
+      },
+    });
     if (!user) return new RequestError('User not found.', 404);
     return user;
   }

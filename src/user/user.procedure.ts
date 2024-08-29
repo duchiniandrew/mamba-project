@@ -2,7 +2,7 @@ import { UserService } from "./user.service";
 import { TrpcService } from "../trpc/trpc.service";
 import { z } from 'zod';
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/createUser.dto";
+import { CreateUserDto } from "./dto/request/createUser.dto";
 
 @Injectable()
 export class UserProcedure {
