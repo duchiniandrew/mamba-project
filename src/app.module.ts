@@ -6,9 +6,14 @@ import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AwsModule } from './aws/aws.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env', '.env.development'],
+      isGlobal: true,
+    }),
     CampaignModule,
     UserModule,
     TrpcModule,

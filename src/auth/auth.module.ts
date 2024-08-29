@@ -5,7 +5,6 @@ import { AuthController } from './auth.controller';
 import { jwtConstants } from './auth.constants';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/guard/auth.guard';
-import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { UserModule } from 'src/user/user.module';
 import { RoleModule } from 'src/role/role.module';
@@ -20,9 +19,7 @@ import { RoleModule } from 'src/role/role.module';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '7d' },
     }),
-    ConfigModule.forRoot({
-      envFilePath: ['.env', '.env.development'],
-    }),
+
   ],
   providers: [
     AuthService, {
