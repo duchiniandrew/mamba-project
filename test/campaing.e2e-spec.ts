@@ -4,8 +4,8 @@ import * as request from 'superagent';
 import { CampaignModule } from '../src/campaign/campaign.module';
 import { describe } from 'node:test';
 import { PrismaService } from '../src/prisma.service';
-import { CreateCampaignDto } from 'src/campaign/dto/createCampaign.dto';
-import { UpdateCampaignDto } from 'src/campaign/dto/updateCampaign.dto';
+import { CreateCampaignDto } from 'src/campaign/dto/request/createCampaign.dto';
+import { UpdateCampaignDto } from 'src/campaign/dto/request/updateCampaign.dto';
 import { Status } from '@prisma/client';
 
 describe('campaign.controller.ts', () => {
