@@ -4,11 +4,13 @@ import { CreateCampaignDto } from './dto/request/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/request/updateCampaign.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';
-import { Campaigns, Status } from '@prisma/client';
+import { Campaigns, Prisma, Status } from '@prisma/client';
 import { CampaignEntity } from './dto/response/campaignEntity';
 import { S3Service } from 'src/aws/aws.service';
 import { ObjectCannedACL } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class CampaignService {
@@ -17,7 +19,7 @@ export class CampaignService {
   async create(createCampaignDto: CreateCampaignDto, file: Express.Multer.File): Promise<CampaignEntity> {
     if (createCampaignDto.endDate.getTime() < new Date().getTime())
       createCampaignDto.status = Status.EXPIRED;
-    if(file) {
+    if (file) {
       await this.s3Service.createObject(file.originalname, file.buffer, ObjectCannedACL.public_read_write);
     }
     const imageUrl = file ? this.configService.get<string>('BUCKET_FILE_ADDRESS') + file.originalname : null;
@@ -30,8 +32,9 @@ export class CampaignService {
     return this.generateResponseDto(campaign);
   }
 
-  async findAll(): Promise<CampaignEntity[]> {
-    const campaign = await this.prisma.campaigns.findMany();
+  async findAll(paginationDto?: PaginationDto, orderBy?: Prisma.CampaignsOrderByWithRelationInput, select?: Prisma.CampaignsSelect<DefaultArgs>): Promise<CampaignEntity[]> {
+    const { take, skip } = paginationDto
+    const campaign = await this.prisma.campaigns.findMany({ select, take, skip, orderBy });
     return campaign.map(c => this.generateResponseDto(c));
   }
 

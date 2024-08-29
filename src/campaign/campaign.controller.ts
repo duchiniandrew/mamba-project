@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CampaignService } from './campaign.service';
 import { CreateCampaignDto } from './dto/request/createCampaign.dto';
@@ -30,6 +31,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guard/roles.guard';
 import { Role } from 'src/enum/role.enum';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Controller('campaign')
 @ApiTags('Campaign')
@@ -72,8 +74,8 @@ export class CampaignController {
     isArray: true,
   })
   @ApiResponse({ status: 200, description: 'List of all campaigns.' })
-  findAll(): Promise<CampaignEntity[]> {
-    return this.campaignService.findAll();
+  findAll(@Query() paginationDto: PaginationDto): Promise<CampaignEntity[]> {
+    return this.campaignService.findAll(paginationDto);
   }
 
   @Get(':id')
