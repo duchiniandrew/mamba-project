@@ -4,6 +4,9 @@ import {
     DeleteObjectCommand,
     GetObjectCommand,
     S3ClientConfig,
+    ObjectCannedACL,
+    PutObjectCommandOutput,
+    DeleteObjectCommandOutput,
 } from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -26,30 +29,33 @@ export class S3Service {
         this.s3Client = new S3Client(this.config);
     }
 
-    switchBucket(bucketName: string) {
+    switchBucket(bucketName: string): void {
         this.bucketName = bucketName
     }
 
-    async deleteObject(key: string) {
-        await this.s3Client.send(
+    async deleteObject(key: string): Promise<DeleteObjectCommandOutput> {
+        const result = await this.s3Client.send(
             new DeleteObjectCommand({
                 Bucket: this.bucketName,
                 Key: key,
             })
         );
+        return result
     }
 
-    async createObject(key: string, body: string) {
-        await this.s3Client.send(
+    async createObject(key: string, body: Buffer, ALC: ObjectCannedACL = ObjectCannedACL.public_read): Promise<PutObjectCommandOutput> {
+        const result = await this.s3Client.send(
             new PutObjectCommand({
                 Bucket: this.bucketName,
                 Key: key,
                 Body: body,
+                ACL: ALC
             })
         );
+        return result
     }
 
-    async getObject(key: string) {
+    async getObject(key: string): Promise<Uint8Array> {
         const { Body } = await this.s3Client.send(
             new GetObjectCommand({
                 Bucket: this.bucketName,
