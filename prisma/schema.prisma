@@ -12,6 +12,7 @@ model Campaigns {
   name      String
   startDate DateTime
   endDate   DateTime
+  imageUrl  String?
   status    Status
   category  Category
   createdAt DateTime @default(now())
