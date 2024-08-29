@@ -10,6 +10,7 @@ import { UserEntity } from './dto/response/user.entity';
 import { Prisma, Users } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { RoleService } from 'src/role/role.service';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class UserService {
@@ -21,8 +22,9 @@ export class UserService {
     return this.generateResponseDto(user);
   }
 
-  async findAll(): Promise<UserEntity[]> {
-    const users = await this.prisma.users.findMany();
+  async findAll(paginationDto?: PaginationDto, orderBy?: Prisma.UsersOrderByWithRelationInput, select?: Prisma.UsersSelect<DefaultArgs>): Promise<UserEntity[]> {
+    const { take, skip } = paginationDto
+    const users = await this.prisma.users.findMany({ select, take, skip, orderBy });
     return users.map(u => this.generateResponseDto(u));
   }
 

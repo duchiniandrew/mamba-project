@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/request/createUser.dto';
@@ -29,6 +30,7 @@ import { CreateRoleDto } from './dto/request/createUserRole.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/role.enum';
 import { RolesGuard } from 'src/guard/roles.guard';
+import { PaginationDto } from 'src/common/pagination.dto';
 
 @Controller('user')
 @ApiTags('User')
@@ -72,8 +74,8 @@ export class UserController {
     isArray: true,
   })
   @ApiResponse({ status: 200, description: 'List of all Users.' })
-  findAll(): Promise<UserEntity[]> {
-    return this.userService.findAll();
+  findAll(@Query() paginationDto: PaginationDto): Promise<UserEntity[]> {
+    return this.userService.findAll(paginationDto);
   }
 
   @Get(':id')
