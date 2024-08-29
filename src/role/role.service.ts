@@ -4,36 +4,44 @@ import { CreateRoleDto } from './dto/request/createRole.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';
 import { RoleEntity } from './role.entity';
-import { Prisma } from '@prisma/client';
+import { Prisma, Roles } from '@prisma/client';
 
 @Injectable()
 export class RoleService {
     constructor(private prisma: PrismaService) { }
 
-    create(createRoleDto: CreateRoleDto): Promise<RoleEntity> {
-        return this.prisma.roles.create({ data: createRoleDto });
+    async create(createRoleDto: CreateRoleDto): Promise<RoleEntity> {
+        const role = await this.prisma.roles.create({ data: createRoleDto });
+        return this.generateResponseDto(role);
     }
 
-    findAll(): Promise<RoleEntity[]> {
-        return this.prisma.roles.findMany();
+    async findAll(): Promise<RoleEntity[]> {
+        const roles = await this.prisma.roles.findMany();
+        return roles.map(role => this.generateResponseDto(role));
     }
 
-    findOne(where: Prisma.RolesWhereUniqueInput): Promise<RoleEntity> {
-        return this.prisma.roles.findUnique({ where });
+    async findOne(where: Prisma.RolesWhereUniqueInput): Promise<RoleEntity> {
+        const role = await this.prisma.roles.findUnique({ where });
+        return this.generateResponseDto(role);
     }
 
-    find(where: Prisma.RolesWhereInput, include?: Prisma.RolesInclude) {
-        return this.prisma.roles.findFirst({ where, include });
+    async find(where: Prisma.RolesWhereInput, include?: Prisma.RolesInclude): Promise<RoleEntity> {
+        const role = await this.prisma.roles.findFirst({ where, include });
+        return this.generateResponseDto(role);
     }
 
     async remove(where: Prisma.RolesWhereUniqueInput): Promise<RoleEntity | RequestError> {
         try {
             const role = await this.prisma.roles.delete({ where });
-            return role;
+            return this.generateResponseDto(role);
         } catch (error) {
             if (error.code === rowDoesNotExistCode) {
                 return new RequestError('Role not found', 404);
             }
         }
+    }
+
+    private generateResponseDto(role: Roles): RoleEntity {
+        return new RoleEntity(role);
     }
 }

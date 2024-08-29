@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { UserRoleEntity } from 'src/userRole/entity/userRole.entity';
 
 export class RoleEntity {
   @ApiProperty()
@@ -8,10 +9,13 @@ export class RoleEntity {
   @ApiProperty()
   name: string;
 
-  @Exclude()
+  @ApiProperty()
+  UserRole?: UserRoleEntity[];
+
+  @Exclude({ toPlainOnly: true })
   createdAt: Date;
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   updatedAt: Date;
 
   constructor(data: Partial<RoleEntity>) {
