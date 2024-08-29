@@ -5,6 +5,7 @@ import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';
 import { RoleEntity } from './role.entity';
 import { Prisma, Roles } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class RoleService {
@@ -20,12 +21,12 @@ export class RoleService {
         return roles.map(role => this.generateResponseDto(role));
     }
 
-    async findOne(where: Prisma.RolesWhereUniqueInput): Promise<RoleEntity> {
-        const role = await this.prisma.roles.findUnique({ where });
+    async findOne(where: Prisma.RolesWhereUniqueInput, include: Prisma.RolesInclude<DefaultArgs>): Promise<RoleEntity> {
+        const role = await this.prisma.roles.findUnique({ where, include });
         return this.generateResponseDto(role);
     }
 
-    async find(where: Prisma.RolesWhereInput, include?: Prisma.RolesInclude): Promise<RoleEntity> {
+    async find(where: Prisma.RolesWhereInput, include?: Prisma.RolesInclude<DefaultArgs>): Promise<RoleEntity> {
         const role = await this.prisma.roles.findFirst({ where, include });
         return this.generateResponseDto(role);
     }

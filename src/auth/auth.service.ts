@@ -3,7 +3,6 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt'
 import { Prisma } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
 import { UserEntity } from 'src/user/dto/response/user.entity';
 
 @Injectable()
@@ -12,11 +11,10 @@ export class AuthService {
 
     async signIn(email: string, pass: string): Promise<{ access_token: string }> {
         const where: Prisma.UsersWhereUniqueInput = { email: email }
-        const include: Prisma.UsersInclude<DefaultArgs> = { UserRoles: { include: { Role: true } } }
-        const user: UserEntity = await this.userService.findOne(where, include);
+        const user: UserEntity = await this.userService.findOne(where);
         const decryptPasswordMatch: boolean = await bcrypt.compare(pass, user.password);
         if (!decryptPasswordMatch) throw new UnauthorizedException();
-        const payload = { sub: user.id, email: user.email, roles: user.UserRoles.map(role => role.Role.name) };
+        const payload = { sub: user.id, email: user.email };
         return {
             access_token: await this.jwtService.signAsync(payload),
         };
