@@ -9,8 +9,8 @@ import { ConfigService } from '@nestjs/config';
 import { UserEntity } from './dto/response/user.entity';
 import { Prisma, Users } from '@prisma/client';
 import { DefaultArgs } from '@prisma/client/runtime/library';
-import { RoleService } from 'src/role/role.service';
-import { PaginationDto } from 'src/common/pagination.dto';
+import { RoleService } from '../role/role.service';
+import { PaginationDto } from '../common/pagination.dto';
 
 @Injectable()
 export class UserService {

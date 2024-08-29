@@ -25,13 +25,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Public } from 'src/decorators/isPublic.decorator';
+import { Public } from '../decorators/isPublic.decorator';
 import { CampaignEntity } from './dto/response/campaignEntity';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Roles } from 'src/decorators/roles.decorator';
-import { RolesGuard } from 'src/guard/roles.guard';
-import { Role } from 'src/enum/role.enum';
-import { PaginationDto } from 'src/common/pagination.dto';
+import { Roles } from '../decorators/roles.decorator';
+import { RolesGuard } from '../guard/roles.guard';
+import { Role } from '../enum/role.enum';
+import { PaginationDto } from '../common/pagination.dto';
 
 @Controller('campaign')
 @ApiTags('Campaign')
@@ -60,7 +60,7 @@ export class CampaignController {
       error: 'Bad Request',
     },
   })
-  create(@Body() createCampaignDto: CreateCampaignDto, @UploadedFile() file: Express.Multer.File): Promise<CampaignEntity> {
+  create(@Body() createCampaignDto: CreateCampaignDto, @UploadedFile() file?: Express.Multer.File): Promise<CampaignEntity> {
     return this.campaignService.create(createCampaignDto, file);
   }
 

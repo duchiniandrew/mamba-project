@@ -7,6 +7,7 @@ import { CampaignController } from './campaign.controller';
 import { CampaignService } from './campaign.service';
 import { Category, Status } from '@prisma/client';
 import { RequestError } from '../types';
+import { PaginationDto } from '../common/pagination.dto';
 
 describe('SectorController', () => {
   let controller: CampaignController;
@@ -88,8 +89,12 @@ describe('SectorController', () => {
           createdAt: new Date('2024-01-01'),
         }),
       ];
+      const paginationDto: PaginationDto = {
+        skip: 10,
+        take: 10,
+      }
       jest.spyOn(campaignService, 'findAll').mockResolvedValueOnce(campaigns);
-      expect(await controller.findAll()).toStrictEqual(expectedCampaigns);
+      expect(await controller.findAll(paginationDto)).toStrictEqual(expectedCampaigns);
     });
   });
 

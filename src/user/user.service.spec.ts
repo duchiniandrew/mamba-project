@@ -1,16 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateCampaignDto } from './dto/createCampaign.dto';
 import { UpdateUserDto } from './dto/request/updateUser.dto';
-import campaignFactory from '../../test/factories/campaign';
+import userFactory from '../../test/factories/user';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { Category, Status } from '@prisma/client';
-import { RequestError } from './types';
+import { PaginationDto } from '../common/pagination.dto';
+import { RequestError } from '../types';
+import { CreateUserDto } from './dto/request/createUser.dto';
 
 describe('SectorController', () => {
   let controller: UserController;
-  let campaignService: UserService;
+  let userService: UserService;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -19,45 +20,27 @@ describe('SectorController', () => {
     }).compile();
 
     controller = module.get<UserController>(UserController);
-    campaignService = module.get<UserService>(UserService);
+    userService = module.get<UserService>(UserService);
   });
 
   describe('findAll', () => {
-    it('should return an array of campaings', async () => {
-      const expectedCampaigns = [
-        campaignFactory.build({
+    it('should return an array of users', async () => {
+      const expectedUsers = [
+        userFactory.build({
           id: 1,
-          name: 'Economic campaign',
-          category: 'ECONOMIC',
-          startDate: new Date('2024-02-01'),
-          endDate: new Date('2024-03-31'),
-          status: Status.ACTIVED,
-          updatedAt: new Date('2024-12-31'),
-          createdAt: new Date('2024-01-01'),
+          name: 'John Henry',
         }),
-        campaignFactory.build({
+        userFactory.build({
           id: 2,
-          name: 'Environmental campaign',
-          category: 'ENVIRONMENTAL',
-          startDate: new Date('2024-02-01'),
-          endDate: new Date('2024-03-31'),
-          status: Status.ACTIVED,
-          updatedAt: new Date('2024-12-31'),
-          createdAt: new Date('2024-01-01'),
+          name: 'Derek Frost',
         }),
-        campaignFactory.build({
+        userFactory.build({
           id: 3,
           name: 'Political campaign',
-          category: 'POLITICAL',
-          startDate: new Date('2024-02-01'),
-          endDate: new Date('2024-03-31'),
-          status: Status.ACTIVED,
-          updatedAt: new Date('2024-12-31'),
-          createdAt: new Date('2024-01-01'),
         }),
       ];
       const campaigns = [
-        campaignFactory.build({
+        userFactory.build({
           id: 1,
           name: 'Economic campaign',
           category: 'ECONOMIC',
@@ -67,7 +50,7 @@ describe('SectorController', () => {
           updatedAt: new Date('2024-12-31'),
           createdAt: new Date('2024-01-01'),
         }),
-        campaignFactory.build({
+        userFactory.build({
           id: 2,
           name: 'Environmental campaign',
           category: 'ENVIRONMENTAL',
@@ -77,7 +60,7 @@ describe('SectorController', () => {
           updatedAt: new Date('2024-12-31'),
           createdAt: new Date('2024-01-01'),
         }),
-        campaignFactory.build({
+        userFactory.build({
           id: 3,
           name: 'Political campaign',
           category: 'POLITICAL',
@@ -88,14 +71,18 @@ describe('SectorController', () => {
           createdAt: new Date('2024-01-01'),
         }),
       ];
-      jest.spyOn(campaignService, 'findAll').mockResolvedValueOnce(campaigns);
-      expect(await controller.findAll()).toStrictEqual(expectedCampaigns);
+      jest.spyOn(userService, 'findAll').mockResolvedValueOnce(campaigns);
+      const paginationDto: PaginationDto = {
+        skip: 10,
+        take: 10,
+      }
+      expect(await controller.findAll(paginationDto)).toStrictEqual(expectedUsers);
     });
   });
 
   describe('findOne', () => {
     it('should return a campaign with id 1', async () => {
-      const campaign = campaignFactory.build({
+      const campaign = userFactory.build({
         id: 1,
         name: 'Economic campaign',
         category: 'ECONOMIC',
@@ -115,14 +102,14 @@ describe('SectorController', () => {
         updatedAt: new Date('2024-12-31'),
         createdAt: new Date('2024-01-01'),
       };
-      jest.spyOn(campaignService, 'findOne').mockResolvedValueOnce(campaign);
+      jest.spyOn(userService, 'findOne').mockResolvedValueOnce(campaign);
       expect(await controller.findOne(1)).toStrictEqual(expected);
     });
 
     it('should try to retrieve a campaign that does not exist', async () => {
       const forcedError = new RequestError('Campaign not found', 404);
       const expectedError = new RequestError('Campaign not found', 404);
-      jest.spyOn(campaignService, 'findOne').mockRejectedValueOnce(forcedError);
+      jest.spyOn(userService, 'findOne').mockRejectedValueOnce(forcedError);
       expect(async () => await controller.findOne(3)).rejects.toThrow(
         expectedError,
       );
@@ -130,8 +117,8 @@ describe('SectorController', () => {
   });
 
   describe('create', () => {
-    it('should return the new sector', async () => {
-      const campaign = campaignFactory.build({
+    it('should return the new user', async () => {
+      const campaign = userFactory.build({
         id: 3,
         name: 'Finance',
         category: 'ECONOMIC',
@@ -141,12 +128,10 @@ describe('SectorController', () => {
         updatedAt: new Date('2024-12-31'),
         createdAt: new Date('2024-01-01'),
       });
-      const createCampaignDto: CreateCampaignDto = {
-        name: 'Finance',
-        startDate: new Date('2024-02-01'),
-        endDate: new Date('2024-03-31'),
-        category: Category.ECONOMIC,
-        status: Status.ACTIVED,
+      const createUserDto: CreateUserDto = {
+        name: "email",
+        email: "email@email.com",
+        password: "password"
       };
       const expectedResult = {
         id: 3,
@@ -158,8 +143,8 @@ describe('SectorController', () => {
         updatedAt: new Date('2024-12-31'),
         createdAt: new Date('2024-01-01'),
       };
-      jest.spyOn(campaignService, 'create').mockResolvedValueOnce(campaign);
-      expect(await controller.create(createCampaignDto)).toStrictEqual(
+      jest.spyOn(userService, 'create').mockResolvedValueOnce(campaign);
+      expect(await controller.create(createUserDto)).toStrictEqual(
         expectedResult,
       );
     });
@@ -167,7 +152,7 @@ describe('SectorController', () => {
 
   describe('update', () => {
     it('should return the updated campaign', async () => {
-      const campaign = campaignFactory.build({
+      const campaign = userFactory.build({
         id: 3,
         name: 'Politics campaign',
         category: Category.POLITICAL,
@@ -178,9 +163,8 @@ describe('SectorController', () => {
         createdAt: new Date('2024-01-01'),
       });
       const updateCampaignDto: UpdateUserDto = {
-        name: 'Politics campaign',
-        endDate: new Date('2024-08-31'),
-        category: Category.POLITICAL,
+        email: "email@email.com",
+        password: "password"
       };
       const expectedResult = {
         id: 3,
@@ -192,7 +176,7 @@ describe('SectorController', () => {
         updatedAt: new Date('2024-12-31'),
         createdAt: new Date('2024-01-01'),
       };
-      jest.spyOn(campaignService, 'update').mockResolvedValueOnce(campaign);
+      jest.spyOn(userService, 'update').mockResolvedValueOnce(campaign);
       expect(await controller.update(3, updateCampaignDto)).toStrictEqual(
         expectedResult,
       );
@@ -200,13 +184,12 @@ describe('SectorController', () => {
 
     it('should try to update a campaign that does not exist', async () => {
       const updateCampaignDto: UpdateUserDto = {
-        name: 'Politics campaign',
-        endDate: new Date('2024-08-31'),
-        category: Category.POLITICAL,
+        email: "email@email.com",
+        password: "password"
       };
       const forcedError = new RequestError('Campaign not found', 404);
       const expectedError = new RequestError('Campaign not found', 404);
-      jest.spyOn(campaignService, 'update').mockRejectedValueOnce(forcedError);
+      jest.spyOn(userService, 'update').mockRejectedValueOnce(forcedError);
       expect(
         async () => await controller.update(30, updateCampaignDto),
       ).rejects.toThrow(expectedError);
@@ -215,7 +198,7 @@ describe('SectorController', () => {
 
   describe('delete', () => {
     it('should delete a campaign', async () => {
-      const campaign = campaignFactory.build({
+      const campaign = userFactory.build({
         id: 3,
         name: 'Politics campaign',
         category: Category.POLITICAL,
@@ -226,7 +209,7 @@ describe('SectorController', () => {
         createdAt: new Date('2024-01-01'),
       });
 
-      const expectedResult = campaignFactory.build({
+      const expectedResult = userFactory.build({
         id: 3,
         name: 'Politics campaign',
         category: Category.POLITICAL,
@@ -236,14 +219,14 @@ describe('SectorController', () => {
         updatedAt: new Date('2024-12-31'),
         createdAt: new Date('2024-01-01'),
       });
-      jest.spyOn(campaignService, 'remove').mockResolvedValueOnce(campaign);
+      jest.spyOn(userService, 'remove').mockResolvedValueOnce(campaign);
       expect(await controller.remove(3)).toStrictEqual(expectedResult);
     });
 
     it('should try to delete a campaign that does not exist', async () => {
       const forcedError = new RequestError('Campaign not found', 404);
       const expectedError = new RequestError('Campaign not found', 404);
-      jest.spyOn(campaignService, 'remove').mockRejectedValueOnce(forcedError);
+      jest.spyOn(userService, 'remove').mockRejectedValueOnce(forcedError);
       expect(async () => await controller.remove(3)).rejects.toThrow(
         expectedError,
       );

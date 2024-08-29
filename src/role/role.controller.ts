@@ -7,9 +7,9 @@ import {
   import { RoleService } from './role.service';
 import { RoleEntity } from './role.entity';
 import { CreateRoleDto } from './dto/request/createRole.dto';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/enum/role.enum';
-import { RolesGuard } from 'src/guard/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../enum/role.enum';
+import { RolesGuard } from '../guard/roles.guard';
   
   @Controller('role')
   export class RoleController {

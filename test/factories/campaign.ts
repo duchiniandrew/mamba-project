@@ -1,6 +1,6 @@
 import { Category, Status } from '@prisma/client';
 import { Factory } from 'fishery';
-import { CampaignEntity } from 'src/campaign/entity/campaign.entity';
+import { CampaignEntity } from '../../src/campaign/dto/response/campaignEntity';
 
 export default Factory.define<CampaignEntity>(({ sequence, params }) => ({
   id: sequence,

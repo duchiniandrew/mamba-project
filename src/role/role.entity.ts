@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { UserRoleEntity } from 'src/userRole/entity/userRole.entity';
+import { UserRoleEntity } from '../userRole/entity/userRole.entity';
 
 export class RoleEntity {
   @ApiProperty()

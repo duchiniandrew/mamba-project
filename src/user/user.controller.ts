@@ -24,13 +24,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './dto/response/user.entity';
-import { Public } from 'src/decorators/isPublic.decorator';
+import { Public } from '../decorators/isPublic.decorator';
 import { Prisma } from '@prisma/client';
 import { CreateRoleDto } from './dto/request/createUserRole.dto';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/enum/role.enum';
-import { RolesGuard } from 'src/guard/roles.guard';
-import { PaginationDto } from 'src/common/pagination.dto';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../enum/role.enum';
+import { RolesGuard } from '../guard/roles.guard';
+import { PaginationDto } from '../common/pagination.dto';
 
 @Controller('user')
 @ApiTags('User')

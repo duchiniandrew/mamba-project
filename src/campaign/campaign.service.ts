@@ -6,11 +6,11 @@ import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';
 import { Campaigns, Prisma, Status } from '@prisma/client';
 import { CampaignEntity } from './dto/response/campaignEntity';
-import { S3Service } from 'src/aws/aws.service';
+import { S3Service } from '../aws/aws.service';
 import { ObjectCannedACL } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { DefaultArgs } from '@prisma/client/runtime/library';
-import { PaginationDto } from 'src/common/pagination.dto';
+import { PaginationDto } from '../common/pagination.dto';
 
 @Injectable()
 export class CampaignService {

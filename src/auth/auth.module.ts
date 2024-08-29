@@ -4,10 +4,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { jwtConstants } from './auth.constants';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from 'src/guard/auth.guard';
-import { PrismaModule } from 'src/prisma/prisma.module';
-import { UserModule } from 'src/user/user.module';
-import { RoleModule } from 'src/role/role.module';
+import { AuthGuard } from '../guard/auth.guard';
+import { PrismaModule } from '../prisma/prisma.module';
+import { UserModule } from '../user/user.module';
+import { RoleModule } from '../role/role.module';
 
 @Module({
   imports: [
