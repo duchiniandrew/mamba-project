@@ -8,8 +8,8 @@ import {
   IsString,
   Validate,
 } from 'class-validator';
-import { IsStartDateHigherThanEndDate } from '../validation/IsStartDateHigherThanEndDate';
-import { IsStartDateLessThanToday } from '../validation/IsStartDateLessThanToday';
+import { IsStartDateHigherThanEndDate } from '../../validation/IsStartDateHigherThanEndDate';
+import { IsStartDateLessThanToday } from '../../validation/IsStartDateLessThanToday';
 
 export class CreateCampaignDto {
   @IsString()

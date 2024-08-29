@@ -21,10 +21,10 @@ export class CampaignEntity {
   @ApiProperty()
   category: Category;
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   createdAt: Date;
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   updatedAt: Date;
 
   constructor(data: Partial<CampaignEntity>) {

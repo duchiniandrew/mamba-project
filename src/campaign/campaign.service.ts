@@ -1,28 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { CreateCampaignDto } from './dto/createCampaign.dto';
-import { UpdateCampaignDto } from './dto/updateCampaign.dto';
+import { CreateCampaignDto } from './dto/request/createCampaign.dto';
+import { UpdateCampaignDto } from './dto/request/updateCampaign.dto';
 import { rowDoesNotExistCode } from '../prismaErrors';
 import { RequestError } from '../types';
-import { Status } from '@prisma/client';
-import { CampaignEntity } from './entity/campaign.entity';
+import { Campaigns, Status } from '@prisma/client';
+import { CampaignEntity } from './dto/response/campaignEntity';
 
 @Injectable()
 export class CampaignService {
   constructor(private prisma: PrismaService) { }
 
-  create(createCampaignDto: CreateCampaignDto): Promise<CampaignEntity> {
+  async create(createCampaignDto: CreateCampaignDto): Promise<CampaignEntity> {
     if (createCampaignDto.endDate.getTime() < new Date().getTime())
       createCampaignDto.status = Status.EXPIRED;
-    return this.prisma.campaigns.create({ data: createCampaignDto });
+    const campaign = await this.prisma.campaigns.create({ data: createCampaignDto });
+    return this.generateResponseDto(campaign);
   }
 
-  findAll(): Promise<CampaignEntity[]> {
-    return this.prisma.campaigns.findMany();
+  async findAll(): Promise<CampaignEntity[]> {
+    const campaign = await this.prisma.campaigns.findMany();
+    return campaign.map(c => this.generateResponseDto(c));
   }
 
-  findOne(id: number): Promise<CampaignEntity> {
-    return this.prisma.campaigns.findUnique({ where: { id } });
+  async findOne(id: number): Promise<CampaignEntity> {
+    const campaign = await this.prisma.campaigns.findUnique({ where: { id } });
+    return this.generateResponseDto(campaign);
   }
 
   async update(id: number, updateCampaignDto: UpdateCampaignDto): Promise<CampaignEntity | RequestError> {
@@ -31,7 +34,7 @@ export class CampaignService {
         data: updateCampaignDto,
         where: { id },
       });
-      return campaign;
+      return this.generateResponseDto(campaign);
     } catch (error) {
       if (error.code === rowDoesNotExistCode) {
         return new RequestError('Campaign not found', 404);
@@ -44,11 +47,15 @@ export class CampaignService {
       const campaign = await this.prisma.campaigns.delete({
         where: { id },
       });
-      return campaign;
+      return this.generateResponseDto(campaign);
     } catch (error) {
       if (error.code === rowDoesNotExistCode) {
         return new RequestError('Campaign not found', 404);
       }
     }
+  }
+
+  private generateResponseDto(campaign: Campaigns): CampaignEntity {
+    return new CampaignEntity(campaign)
   }
 }

@@ -9,8 +9,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CampaignService } from './campaign.service';
-import { CreateCampaignDto } from './dto/createCampaign.dto';
-import { UpdateCampaignDto } from './dto/updateCampaign.dto';
+import { CreateCampaignDto } from './dto/request/createCampaign.dto';
+import { UpdateCampaignDto } from './dto/request/updateCampaign.dto';
 import { BadRequestCommonError, RequestError } from '../types';
 import {
   ApiBadRequestResponse,
@@ -21,8 +21,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CampaignEntity } from './entity/campaign.entity';
 import { Public } from 'src/decorators/isPublic.decorator';
+import { CampaignEntity } from './dto/response/campaignEntity';
 
 @Controller('campaign')
 @ApiTags('Campaign')
