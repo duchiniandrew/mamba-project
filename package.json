@@ -28,6 +28,7 @@
     "db:seed": "npm run db:seedUsers && npm run db:seedRoles && npm run db:seedGroups && npm run db:seedCampaigns && npm run db:seedUserRoles && npm run db:seedUserGroups && npm run db:seedGroupRole"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.637.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
     "@nestjs/core": "^10.0.0",

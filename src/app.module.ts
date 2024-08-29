@@ -5,6 +5,7 @@ import { TrpcModule } from './trpc/trpc.module';
 import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PrismaModule } from './prisma/prisma.module';
     AuthModule,
     RoleModule,
     PrismaModule,
+    AwsModule,
   ],
   controllers: [],
   providers: [],
