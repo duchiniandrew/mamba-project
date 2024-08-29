@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/request/createCampaign.dto';
 import { UpdateCampaignDto } from './dto/request/updateCampaign.dto';
@@ -14,7 +14,7 @@ import { PaginationDto } from 'src/common/pagination.dto';
 
 @Injectable()
 export class CampaignService {
-  constructor(private prisma: PrismaService, private s3Service: S3Service, private configService: ConfigService) { }
+  constructor(@Inject('PrismaService') private prisma: PrismaService, private s3Service: S3Service, private configService: ConfigService) { }
 
   async create(createCampaignDto: CreateCampaignDto, file: Express.Multer.File): Promise<CampaignEntity> {
     if (createCampaignDto.endDate.getTime() < new Date().getTime())
