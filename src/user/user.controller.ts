@@ -62,6 +62,8 @@ export class UserController {
   }
 
   @Get()
+  @Roles(Role.STAFF)
+  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get all Users' })
   @ApiResponse({
     status: 200,
@@ -75,6 +77,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @Roles(Role.STAFF)
+  @UseGuards(RolesGuard)
   @ApiParam({
     name: 'id',
     required: true,
@@ -110,6 +114,8 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Roles(Role.STAFF)
+  @UseGuards(RolesGuard)
   @ApiParam({
     name: 'id',
     required: true,
@@ -150,6 +156,8 @@ export class UserController {
   }
 
   @Delete(':id')
+  @Roles(Role.STAFF)
+  @UseGuards(RolesGuard)
   @ApiParam({
     name: 'id',
     required: true,
@@ -189,7 +197,7 @@ export class UserController {
   }
 
   @Post('/add-role')
-  @Roles(Role.ADMIN)
+  @Roles(Role.STAFF)
   @UseGuards(RolesGuard)
   addUserRole(@Body() createRoleDto: CreateRoleDto): Promise<void> {
     const where: Prisma.UsersWhereUniqueInput = { id: createRoleDto.id };

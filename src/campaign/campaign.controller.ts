@@ -9,6 +9,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { CampaignService } from './campaign.service';
 import { CreateCampaignDto } from './dto/request/createCampaign.dto';
@@ -26,6 +27,9 @@ import {
 import { Public } from 'src/decorators/isPublic.decorator';
 import { CampaignEntity } from './dto/response/campaignEntity';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuard } from 'src/guard/roles.guard';
+import { Role } from 'src/enum/role.enum';
 
 @Controller('campaign')
 @ApiTags('Campaign')
@@ -73,6 +77,7 @@ export class CampaignController {
   }
 
   @Get(':id')
+  @Public()
   @ApiParam({
     name: 'id',
     required: true,
@@ -102,6 +107,8 @@ export class CampaignController {
   }
 
   @Patch(':id')
+  @Roles(Role.MANAGER)
+  @UseGuards(RolesGuard)
   @ApiParam({
     name: 'id',
     required: true,
@@ -141,6 +148,8 @@ export class CampaignController {
     return this.campaignService.update(id, UpdateCampaignDto);
   }
 
+  @Roles(Role.MANAGER)
+  @UseGuards(RolesGuard)
   @Delete(':id')
   @ApiParam({
     name: 'id',
