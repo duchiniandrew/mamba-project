@@ -12,7 +12,6 @@ export class UserProcedure {
         return this.trpc.procedure
             .input(
                 z.object({
-                    id: z.number(),
                     name: z.string(),
                     email: z.string(),
                     password: z.string(),
